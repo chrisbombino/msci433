@@ -4,7 +4,7 @@ from collections import deque
 import matplotlib.pyplot as plt
 import matplotlib.dates as matdates
 import matplotlib as mpl
-% matplotlib inline
+
 def sma_ema(DJIdata):
     DJIdata['ROI']= DJIdata['Close'].pct_change()
 
@@ -286,7 +286,7 @@ def RSI(df, s):
     df['Buy Signal'] = buy
 
     df_csv = df[['Close', 'ROI', 'RSI', 'Sell Signal', 'Buy Signal']]
-    df_csv.to_csv('{}/{}-RSI.csv'.format(s))
+    df_csv.to_csv('{}30/{}-RSI.csv'.format(s, s))
 
     # create the plot
     fig, ax = plt.subplots()
@@ -485,7 +485,7 @@ def PriceChannelOutputCSV(df,file_name):
 #three dataframes are called DJIdata,NASDAQ30data and AAPLdata
 #---------------------------------------------------
 def load_data(s):
-    data = pd.read_csv("{}/{}.csv".format(s))
+    data = pd.read_csv("{}/{}.csv".format(s, s))
     #change string into date format
     data['Date']= pd.to_datetime(data['Date'], format="%Y/%m/%d %H:%M:%S")
     return data
