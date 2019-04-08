@@ -4,7 +4,7 @@ from collections import deque
 import matplotlib.pyplot as plt
 import matplotlib.dates as matdates
 import matplotlib as mpl
-
+#
 def sma_ema(DJIdata):
     DJIdata['ROI']= DJIdata['Close'].pct_change()
 
