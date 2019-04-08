@@ -16,11 +16,6 @@ Please see README.md for more details.
 import pandas as pd
 import numpy as np
 
-data = pd.read_csv('test.csv')
-
-numShares = 10 # shares bought in batches of 10
-startingCash = 100000
-
 # There are 4 actions regarding the purchase/sale of stock
 # long buy, long sell, short buy, short sell
 # the actions are all similar, but have slight differences
@@ -47,7 +42,7 @@ def longSellAction(portfolio, price, shares, df_trades):
 
     # calculate ROI and add trade to df_trades
     ret = (portfolio['value'] / df_trades.iloc[-1, 3]) - 1
-    trade = {'Shares': -shares, 'Position': 'Exit Long', 'Return': ret, 'Portfolio Value': portfolio['value']}
+    trade = {'Shares': -shares, 'Position': 'Exit Long', 'Return': ret * 100, 'Portfolio Value': portfolio['value']}
     df_trades = df_trades.append(trade, ignore_index=True)
 
     return portfolio, df_trades
@@ -61,7 +56,7 @@ def shortBuyAction(portfolio, price, shares, df_trades):
 
     # calculate ROI and add trade to df_trades
     ret = (portfolio['value'] / df_trades.iloc[-1, 3]) - 1
-    trade = {'Shares': shares, 'Position': 'Exit Short', 'Return': ret, 'Portfolio Value': portfolio['value']}
+    trade = {'Shares': shares, 'Position': 'Exit Short', 'Return': ret * 100, 'Portfolio Value': portfolio['value']}
     df_trades = df_trades.append(trade, ignore_index=True)
 
     return portfolio, df_trades
@@ -140,8 +135,14 @@ def simulateTrading(df):
                 state = ''
                 continue
 
-    print 'ROI = {}%'.format(((portfolio['cash']/startingCash - 1))*100)
-    print ''
+    print '\nTrade history:\n'
     print df_trades
+    print '\nROI = {}%'.format(((portfolio['cash']/startingCash - 1))*100)
 
-simulateTrading(data)
+
+if __name__ == '__main__':
+    data = pd.read_csv('test.csv')
+    numShares = 10 # shares bought in batches of 10
+    startingCash = 1000
+
+    simulateTrading(data)
