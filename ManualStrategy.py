@@ -6,48 +6,62 @@ data = pd.read_csv('test.csv')
 numShares = 10 # shares bought in batches of 10
 startingCash = 100000
 
-# df_trades = df_trades.append({'Shares': 10, 'Position': 'Enter Long', 'Return': 0.01, 'Portfolio Value': 100100}, ignore_index=True)
+# There are 4 actions regarding the purchase/sale of stock
+# long buy, long sell, short buy, short sell
+# the actions are all similar, but have slight differences
 
 def longBuyAction(portfolio, price, shares, df_trades):
     # TODO: check if portfolio has enough cash
+    # update amount of long stock, cash and portfolio value
     portfolio['long-stock'] += shares
     portfolio['cash'] -= price * shares
     portfolio['value'] = portfolio['cash'] + price * (portfolio['long-stock'] - portfolio['short-stock'])
 
+    # add trade to df_trades
     trade = {'Shares': shares, 'Position': 'Enter Long', 'Return': np.nan, 'Portfolio Value': portfolio['value']}
     df_trades = df_trades.append(trade, ignore_index=True)
+
     return portfolio, df_trades
 
 def longSellAction(portfolio, price, shares, df_trades):
     # TODO: check if portfolio has enough cash
+    # update amount of long stock, cash and portfolio value
     portfolio['long-stock'] -= shares
     portfolio['cash'] += price * shares
     portfolio['value'] = portfolio['cash'] + price * (portfolio['long-stock'] - portfolio['short-stock'])
 
+    # calculate ROI and add trade to df_trades
     ret = (portfolio['value'] / df_trades.iloc[-1, 3]) - 1
     trade = {'Shares': -shares, 'Position': 'Exit Long', 'Return': ret, 'Portfolio Value': portfolio['value']}
     df_trades = df_trades.append(trade, ignore_index=True)
+
     return portfolio, df_trades
 
 def shortBuyAction(portfolio, price, shares, df_trades):
     # TODO: check if portfolio has enough cash
+    # update amount of short stock, cash and portfolio value
     portfolio['short-stock'] -= shares
     portfolio['cash'] -= price * shares
     portfolio['value'] = portfolio['cash'] + price * (portfolio['long-stock'] - portfolio['short-stock'])
 
+    # calculate ROI and add trade to df_trades
     ret = (portfolio['value'] / df_trades.iloc[-1, 3]) - 1
     trade = {'Shares': shares, 'Position': 'Exit Short', 'Return': ret, 'Portfolio Value': portfolio['value']}
     df_trades = df_trades.append(trade, ignore_index=True)
+
     return portfolio, df_trades
 
 def shortSellAction(portfolio, price, shares, df_trades):
     # TODO: check if portfolio should short
+    # update amount of short stock, cash and portfolio value
     portfolio['short-stock'] += shares
     portfolio['cash'] += price * shares
     portfolio['value'] = portfolio['cash'] + price * (portfolio['long-stock'] - portfolio['short-stock'])
 
+    # add trade to df_trades
     trade = {'Shares': -shares, 'Position': 'Enter Short', 'Return': np.nan, 'Portfolio Value': portfolio['value']}
     df_trades = df_trades.append(trade, ignore_index=True)
+
     return portfolio, df_trades
 
 def simulateTrading(df):
@@ -58,9 +72,10 @@ def simulateTrading(df):
         'short-stock': 0
     }
 
+    # initialize df_trades
     df_trades = pd.DataFrame(columns=['Shares', 'Position', 'Return', 'Portfolio Value'])
-    # start out not holding any position
-    state = ''
+
+    state = '' # start out not holding any position
 
     for i, row in df.iterrows():
         if state == '':
