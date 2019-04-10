@@ -366,18 +366,19 @@ def Bollinger(df):
     df['Sell']= df['Upper Bound']-df['Close']
     #if close value hight than upperband it is 1, otherwise 0
     #if condition in python df https://datatofish.com/if-condition-in-pandas-dataframe/
-    df['AboveBand'] = df['Sell'].apply(lambda x: 1 if x <0 else 0)
+    df['sellSignal'] = df['Sell'].apply(lambda x: 1 if x <0 else 0)
     #sum aboveband in past 5 periods to indicate if there is a crossing above with in 5 periods, (>0 if there is)
-    df['AboveBand5'] = df['AboveBand'].rolling(window=5).sum()
+    #df['AboveBand5'] = df['AboveBand'].rolling(window=5).sum()
     #1 if there is a corssing thus to sell
-    df['sellSignal']= df['AboveBand5'].apply(lambda x: 1 if x >0 else 0)
+    #df['sellSignal']= df['AboveBand5'].apply(lambda x: 1 if x >0 else 0)
 
     df['Buy']= df['Close']-df['Lower Bound']
-    df['BelowBand'] = df['Buy'].apply(lambda x: 1 if x <0 else 0)
-    df['BelowBand5'] = df['BelowBand'].rolling(window=5).sum()
-    df['buySignal']= df['BelowBand5'].apply(lambda x: 1 if x >0 else 0)
+    df['buySignal'] = df['Buy'].apply(lambda x: 1 if x <0 else 0)
+    #df['BelowBand5'] = df['BelowBand'].rolling(window=5).sum()
+    #df['buySignal']= df['BelowBand5'].apply(lambda x: 1 if x >0 else 0)
 
-    df['ROI']= df['Close'].pct_change(-1)
+    df['ROI']= df['Close'].pct_change()
+    #-1 roll from the bottom
     #this is for rolling multiply
     #https://stackoverflow.com/a/15296415
     #df['Test']=df['Sell'].rolling(5).apply(lambda x: np.prod(x))
@@ -401,16 +402,16 @@ def AAPLBollinger(df):
     df['Sell']= df['Upper Bound']-df['Close']
     #if close value hight than upperband it is 1, otherwise 0
     #if condition in python df https://datatofish.com/if-condition-in-pandas-dataframe/
-    df['AboveBand'] = df['Sell'].apply(lambda x: 1 if x <0 else 0)
+    df['sellSignal'] = df['Sell'].apply(lambda x: 1 if x <0 else 0)
     #sum aboveband in past 5 periods to indicate if there is a crossing above with in 5 periods, (>0 if there is)
-    df['AboveBand5'] = df['AboveBand'].rolling(window=5).sum()
+    #df['AboveBand5'] = df['AboveBand'].rolling(window=5).sum()
     #1 if there is a corssing thus to sell
-    df['sellSignal']= df['AboveBand5'].apply(lambda x: 1 if x >0 else 0)
+    #df['sellSignal']= df['AboveBand5'].apply(lambda x: 1 if x >0 else 0)
 
     df['Buy']= df['Close']-df['Lower Bound']
-    df['BelowBand'] = df['Buy'].apply(lambda x: 1 if x <0 else 0)
-    df['BelowBand5'] = df['BelowBand'].rolling(window=5).sum()
-    df['buySignal']= df['BelowBand5'].apply(lambda x: 1 if x >0 else 0)
+    df['buySignal'] = df['Buy'].apply(lambda x: 1 if x <0 else 0)
+    #df['BelowBand5'] = df['BelowBand'].rolling(window=5).sum()
+    #df['buySignal']= df['BelowBand5'].apply(lambda x: 1 if x >0 else 0)
 
     df['ROI']= df['Close'].pct_change()
     #this is for rolling multiply
