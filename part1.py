@@ -529,7 +529,10 @@ def PriceChannelOutputCSV(df,file_name):
     dfOutput.to_csv(file_name,index=False)
 
 def bollingerClose(df):
-    print df
+    #https://stackoverflow.com/a/16729808
+    print df.iloc[20]['Buy']
+    print 'hello'
+
 
 
 
