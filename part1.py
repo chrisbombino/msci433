@@ -528,6 +528,11 @@ def PriceChannelOutputCSV(df,file_name):
     dfOutput= df[['Date','Close','Lower Bound','Upper Bound','Middle Bound','sellSignal','buySignal']]
     dfOutput.to_csv(file_name,index=False)
 
+def bollingerClose(df):
+    print df
+
+
+
 #three dataframes are called DJIdata,NASDAQ30data and AAPLdata
 #---------------------------------------------------
 def load_data(s,directory):
@@ -596,7 +601,8 @@ if __name__== "__main__":
     AAPLdataBollinger=AAPLBollinger(AAPLdataBollinger)
     AAPLBollingerPlot(AAPLdataBollinger, 'AAPL 20 Period Bollinger Band')
     bollingerOutputCSV(AAPLdataBollinger,'AAPL/AAPLBollinger.csv')
-
+    bollingerClose(AAPLdataBollinger)
+    
     DJIdataBollinger=DJIdata.copy()
     DJIdataBollinger=Bollinger(DJIdataBollinger)[:]
     BollingerPlot(DJIdataBollinger, 'DJI 20 Period Bollinger Band')
