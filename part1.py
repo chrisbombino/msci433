@@ -535,6 +535,7 @@ def load_data(s,directory):
     data['Date']= pd.to_datetime(data['Date'], format="%Y/%m/%d %H:%M:%S")
     return data
 def normalize(dfdata):
+    dfdata['Price'] = dfdata['Close']
     #divide last element in df series
     day1= float(dfdata['Close'].iloc[[-1]])
     #div function https://stackoverflow.com/a/43675057
@@ -543,6 +544,7 @@ def normalize(dfdata):
 
 #appl data has different order than the other two
 def aaplnormalize(dfdata):
+    dfdata['Price'] = dfdata['Close']
     #divide last element in df series
     day1= float(dfdata['Close'].iloc[[0]])
     #div function https://stackoverflow.com/a/43675057
