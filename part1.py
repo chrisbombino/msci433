@@ -4,6 +4,7 @@ from collections import deque
 import matplotlib.pyplot as plt
 import matplotlib.dates as matdates
 import matplotlib as mpl
+%matplotlib
 #
 def sma_ema(DJIdata, file_name, directory):
 
