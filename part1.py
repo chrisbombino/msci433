@@ -6,15 +6,15 @@ import matplotlib.dates as matdates
 import matplotlib as mpl
 #
 def sma_ema(DJIdata, file_name,directory):
-    DJIdata['ROI']= DJIdata['Close'].pct_change()    
+    DJIdata['ROI']= DJIdata['Close'].pct_change()
     data = DJIdata[['Date','Close']]
-    
+
     # Calculating the short-window simple moving average
     # Put the data into the dataframe
     for i in (5,10,15):
         short_rolling = data.set_index('Date').rolling(window=i).mean()
         DJIdata['SMA ' + str(i)] = short_rolling.values
-    
+
     # BuySignal1 (SMA 5 crosses SMA 10)
     buySignal1 = []
     for i in range (0, DJIdata.shape[0]):
@@ -24,9 +24,9 @@ def sma_ema(DJIdata, file_name,directory):
             buySignal1.append(1)
         else:
             buySignal1.append(0)
-            
+
     DJIdata['buySignal1'] =buySignal1
-    
+
     # BuySignal2 (SMA 5 crosses SMA 10)
     buySignal2 = []
     for i in range (0, DJIdata.shape[0]):
@@ -36,9 +36,9 @@ def sma_ema(DJIdata, file_name,directory):
             buySignal2.append(1)
         else:
             buySignal2.append(0)
-            
+
     DJIdata['buySignal2'] = buySignal2
-    
+
    # SellSignal1 (SMA 5 crosses SMA 10)
     sellSignal1 = []
     for i in range (0, DJIdata.shape[0]):
@@ -48,9 +48,9 @@ def sma_ema(DJIdata, file_name,directory):
             sellSignal1.append(1)
         else:
             sellSignal1.append(0)
-            
+
     DJIdata['sellSignal1'] = sellSignal1
-    
+
     # SellSignal1 (SMA 5 crosses SMA 10)
     sellSignal2 = []
     for i in range (0, DJIdata.shape[0]):
@@ -60,14 +60,14 @@ def sma_ema(DJIdata, file_name,directory):
             sellSignal2.append(1)
         else:
             sellSignal2.append(0)
-            
+
     DJIdata['sellSignal2'] = sellSignal2
-    
-    
+
+
     closePriceSMA5 = []
     closePriceSMA10 = []
     closePriceSMA15 = []
-    
+
     # Dividing closePrice with SMA5/10/15
     for i in range (0,DJIdata.shape[0]):
         if np.isnan(DJIdata['SMA 15'][i]) == True :
@@ -82,15 +82,15 @@ def sma_ema(DJIdata, file_name,directory):
             closePriceSMA5.append("NA")
         if np.isnan(DJIdata['SMA 5'][i]) == False :
             closePriceSMA5.append(DJIdata['Close'][i] / DJIdata['SMA 5'][i])
-            
+
     # Inputting ClosePrice/SMA 5/10/15 into dataframe
     DJIdata['closePriceSMA5'] = closePriceSMA5
     DJIdata['closePriceSMA10'] = closePriceSMA10
     DJIdata['closePriceSMA15'] = closePriceSMA15
-    
-    
+
+
     dataROI = DJIdata[['Date','ROI']]
-    
+
     # Calculating the short-window simple moving average
     # Put the data into the dataframe
     short_rolling = dataROI.set_index('Date').rolling(window=8).mean()
@@ -112,15 +112,15 @@ def sma_ema(DJIdata, file_name,directory):
         elif DJIdata['sellSignal1'][i] == 1 and state[i-1] == "exit" :
             state.append("short")
         elif DJIdata['sellSignal1'][i] == 1 and state[i-1] == "short" :
-            state.append("short")        
+            state.append("short")
         elif DJIdata['sellSignal1'][i] == 1 and state[i-1] == "long" :
             state.append("exit")
         elif DJIdata['sellSignal1'][i] == 0 and DJIdata['buySignal1'][i] == 0 :
             state.append(state[i-1])
-            
+
     DJIdata['state'] = state
     exit_Signal = []
-    
+
     for i in range(0, DJIdata.shape[0]) :
         if np.isnan(DJIdata['ROI_8'][i]) == True:
             exit_Signal.append("NA")
@@ -134,17 +134,17 @@ def sma_ema(DJIdata, file_name,directory):
             exit_Signal.append("1")
         else :
             exit_Signal.append("0")
-    
-    DJIdata['exit_Signal'] = exit_Signal    
-    CumSumROI = np.cumsum(DJIdata['ROI'])    
-    
+
+    DJIdata['exit_Signal'] = exit_Signal
+    CumSumROI = np.cumsum(DJIdata['ROI'])
+
     #Exponential Moving Average -------------------------------------------------------------------------------------
-    
+
 
     for i in (5,10,15):
         ema_short = data.set_index('Date').ewm(span=i, adjust=False).mean()
         DJIdata['EMA ' + str(i)] = ema_short.values
-    
+
     # BuySignal1 (EMA 5 crosses EMA 10)
     buySignal1EMA = []
     for i in range (0, DJIdata.shape[0]):
@@ -154,9 +154,9 @@ def sma_ema(DJIdata, file_name,directory):
             buySignal1EMA.append(1)
         else:
             buySignal1EMA.append(0)
-            
+
     DJIdata['buySignal1EMA'] = buySignal1EMA
-    
+
     # BuySignal1 (EMA 10 crosses EMA 15)
     buySignal2EMA = []
     for i in range (0, DJIdata.shape[0]):
@@ -166,9 +166,9 @@ def sma_ema(DJIdata, file_name,directory):
             buySignal2EMA.append(1)
         else:
             buySignal2EMA.append(0)
-                                 
+
     DJIdata['buySignal2EMA'] = buySignal2EMA
-    
+
     # SellSignal1 (EMA 5 crosses EMA 10)
     sellSignal1 = []
     for i in range (0, DJIdata.shape[0]):
@@ -178,9 +178,9 @@ def sma_ema(DJIdata, file_name,directory):
             sellSignal1.append(1)
         else:
             sellSignal1.append(0)
-            
+
     DJIdata['sellSignal1'] =sellSignal1
-    
+
     # SellSignal1 (EMA 5 crosses EMA 10)
     sellSignal2 = []
     for i in range (0, DJIdata.shape[0]):
@@ -190,13 +190,13 @@ def sma_ema(DJIdata, file_name,directory):
             sellSignal2.append(1)
         else:
             sellSignal2.append(0)
-            
+
     DJIdata['sellSignal2'] =sellSignal2
-            
+
     closePriceEMA5 = []
     closePriceEMA10 = []
     closePriceEMA15 = []
-    
+
     # Dividing closePrice with EMA5/10/15
     for i in range (0,DJIdata.shape[0]):
         if np.isnan(DJIdata['EMA 15'][i]) == True :
@@ -211,8 +211,8 @@ def sma_ema(DJIdata, file_name,directory):
             closePriceEMA5.append("NA")
         if np.isnan(DJIdata['EMA 5'][i]) == False :
             closePriceEMA5.append(DJIdata['Close'][i] / DJIdata['EMA 5'][i])
-        
-    # Inputting ClosePrice/EMA 5/10/15 into dataframe 
+
+    # Inputting ClosePrice/EMA 5/10/15 into dataframe
     DJIdata['closePriceEMA5'] = closePriceEMA5
     DJIdata['closePriceEMA10'] = closePriceEMA10
     DJIdata['closePriceEMA15'] = closePriceEMA15
@@ -220,15 +220,15 @@ def sma_ema(DJIdata, file_name,directory):
     #Making dataframes for both EMA and SMA to plot on
     plotdf1 = DJIdata[['Date', 'Close' , 'SMA 5' , 'SMA 10' , 'SMA 15']]
     plotdf1.plot(x='Date')
-    
+
     plotdf2 = DJIdata[['Date', 'Close' , 'EMA 5' , 'EMA 10' , 'EMA 15']]
     plotdf2.plot(x='Date')
-    
+
     #Outputting the dataframe to csv
     DJIdata.to_csv(directory+'/SMA+EMA_' + file_name + '.csv',index=False)
 
-    
-    
+
+
 
 def AAPL_RSI(df):
     df['ROI'] = df['Close'].pct_change()
@@ -290,7 +290,7 @@ def AAPL_RSI(df):
     plt.show()
 
 def RSI(df, s):
-    df['ROI'] = df['Close'].pct_change(-1)
+    df['ROI'] = df['Close'].pct_change()
 
     dUp = df['ROI'].copy()
     dDown = df['ROI'].copy()
@@ -565,22 +565,22 @@ if __name__== "__main__":
     AAPLdata = load_data(s,s)
     AAPLdata=aaplnormalize(AAPLdata)
     #----------------------------------------
-    
+
     #SMA EMA
-    
+
     AAPL_data_sma_ema = AAPLdata.copy()
     AAPL_data_sma_ema = sma_ema(AAPL_data_sma_ema, 'AAPL',s)
-    
+
     DJI_data_sma_ema = DJIdata.copy()
     DJI_data_sma_ema = sma_ema(DJI_data_sma_ema, 'DJI','DJI30')
-    
+
     NASDAQ30_data_sma_ema = NASDAQ30data.copy()
     NASDAQ30_data_sma_ema = sma_ema(NASDAQ30_data_sma_ema, 'NASDAQ','NASDAQ30')
 
 
     #RSI
     AAPL_data_RSI = AAPLdata.copy()
-    AAPL_data_RSI = AAPL_RSI(AAPL_data_RSI)
+    AAPL_data_RSI = RSI(AAPL_data_RSI)
 
     DJI_data_RSI = DJIdata.copy()
     DJI_data_RSI = RSI(DJI_data_RSI, 'DJI')
