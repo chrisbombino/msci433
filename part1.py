@@ -580,7 +580,7 @@ if __name__== "__main__":
 
     #RSI
     AAPL_data_RSI = AAPLdata.copy()
-    AAPL_data_RSI = RSI(AAPL_data_RSI)
+    AAPL_data_RSI = AAPL_RSI(AAPL_data_RSI)
 
     DJI_data_RSI = DJIdata.copy()
     DJI_data_RSI = RSI(DJI_data_RSI, 'DJI')
