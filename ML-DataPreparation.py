@@ -48,7 +48,7 @@ if __name__== "__main__":
     NASDAQBollinger=NASDAQBollinger.assign(EMA5=nasdaqema['EMA 5'])
     NASDAQBollinger=NASDAQBollinger.assign(EMA10=nasdaqema['EMA 10'])
     NASDAQBollinger=NASDAQBollinger.assign(EMA15=nasdaqema['EMA 15'])
-    NASDAQBollinger.to_csv('ML/NADSAQML.csv',index=False)
+    NASDAQBollinger.to_csv('ML/NASDAQML.csv',index=False)
 
 
     s = 'AAPL-RSI'
