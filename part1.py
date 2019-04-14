@@ -146,6 +146,20 @@ def sma_ema(DJIdata, file_name, directory):
     DJIdataSMA.to_csv(directory + '/SMA_' + file_name + '.csv',index=False)
 
 
+    fig = plt.figure(figsize=(7,5))
+    ax = fig.add_subplot(2, 1, 1)
+    ax.set_xticklabels([])
+    plt.plot(data['Close'],lw=1)
+    plt.title('Price Chart ' + file_name)
+    plt.ylabel('Close Price')
+    plt.grid(True)
+    bx = fig.add_subplot(2, 1, 2)
+    plt.plot(CCI,'k',lw=0.75,linestyle='-',label='CCI')
+    plt.legend(loc=2,prop={'size':9.5})
+    plt.ylabel('CCI values')
+    plt.grid(True)
+    plt.setp(plt.gca().get_xticklabels(), rotation=30)
+
 
     #Exponential Moving Average -------------------------------------------------------------------------------------
 
@@ -275,10 +289,10 @@ def sma_ema(DJIdata, file_name, directory):
 
     #Making dataframes for both EMA and SMA to plot on
     plotdf1 = DJIdata[['Date', 'Close' , 'SMA 5' , 'SMA 10' , 'SMA 15']]
-    plotdf1.plot(x='Date')
+    plotdf1.plot(x='Date', title = 'SMA Chart of ' + file_name)
 
     plotdf2 = DJIdata[['Date', 'Close' , 'EMA 5' , 'EMA 10' , 'EMA 15']]
-    plotdf2.plot(x='Date')
+    plotdf2.plot(x='Date', title = 'EMA Chart of ' + file_name)
 
     #Outputting the dataframe to csv
     #DJIdata.to_csv('SMA+EMA_' + file_name + '.csv',index=False)
