@@ -142,6 +142,9 @@ def sma_ema(DJIdata, file_name, directory):
     SMA_DF = DJIdata[['Date' , 'Price' , 'buySignal1', 'sellSignal1' , 'exit_Signal_SMA']]
 
     SMA_DF.columns = ['Date' , 'Price' , 'BuySignal' , 'SellSignal' , 'ExitSignal']
+    
+    SMA_DF.to_csv(directory + '/SMA_DF_' + file_name + '.csv',index=False)
+
 
     DJIdataSMA.to_csv(directory + '/SMA_' + file_name + '.csv',index=False)
 
@@ -305,7 +308,10 @@ def sma_ema(DJIdata, file_name, directory):
     EMA_DF = DJIdata[['Date' , 'Price' , 'buySignal1EMA', 'sellSignal1EMA' , 'exit_Signal_EMA']]
 
     EMA_DF.columns = ['Date' , 'Price' , 'BuySignal' , 'SellSignal' , 'ExitSignal']
-
+    
+    
+    EMA_DF.to_csv(directory + '/EMA_DF_' + file_name + '.csv',index=False)
+    
     DJIdataEMA.to_csv(directory + '/EMA_' + file_name + '.csv',index=False)
 
 
