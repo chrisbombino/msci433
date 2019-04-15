@@ -466,14 +466,14 @@ def Bollinger(df):
     df['Sell']= df['Upper Bound']-df['Close']
     #if close value hight than upperband it is 1, otherwise 0
     #if condition in python df https://datatofish.com/if-condition-in-pandas-dataframe/
-    df['sellSignal'] = df['Sell'].apply(lambda x: 1 if x <0 else 0)
+    df['sellSignal'] = df['Sell'].apply(lambda x: 1 if x <0 else '')
     #sum aboveband in past 5 periods to indicate if there is a crossing above with in 5 periods, (>0 if there is)
     #df['AboveBand5'] = df['AboveBand'].rolling(window=5).sum()
     #1 if there is a corssing thus to sell
     #df['sellSignal']= df['AboveBand5'].apply(lambda x: 1 if x >0 else 0)
 
     df['Buy']= df['Close']-df['Lower Bound']
-    df['buySignal'] = df['Buy'].apply(lambda x: 1 if x <0 else 0)
+    df['buySignal'] = df['Buy'].apply(lambda x: 1 if x <0 else '')
     #df['BelowBand5'] = df['BelowBand'].rolling(window=5).sum()
     #df['buySignal']= df['BelowBand5'].apply(lambda x: 1 if x >0 else 0)
 
@@ -502,14 +502,15 @@ def AAPLBollinger(df):
     df['Sell']= df['Upper Bound']-df['Close']
     #if close value hight than upperband it is 1, otherwise 0
     #if condition in python df https://datatofish.com/if-condition-in-pandas-dataframe/
-    df['sellSignal'] = df['Sell'].apply(lambda x: 1 if x <0 else 0)
+    df['sellSignal'] = df['Sell'].apply(lambda x: 1 if x <0 else '')
     #sum aboveband in past 5 periods to indicate if there is a crossing above with in 5 periods, (>0 if there is)
     #df['AboveBand5'] = df['AboveBand'].rolling(window=5).sum()
     #1 if there is a corssing thus to sell
     #df['sellSignal']= df['AboveBand5'].apply(lambda x: 1 if x >0 else 0)
-
+    
+    #np.nan
     df['Buy']= df['Close']-df['Lower Bound']
-    df['buySignal'] = df['Buy'].apply(lambda x: 1 if x <0 else 0)
+    df['buySignal'] = df['Buy'].apply(lambda x: 1 if x <0 else '')
     #df['BelowBand5'] = df['BelowBand'].rolling(window=5).sum()
     #df['buySignal']= df['BelowBand5'].apply(lambda x: 1 if x >0 else 0)
 
@@ -522,7 +523,7 @@ def AAPLBollinger(df):
 
 def bollingerOutputCSV(df,file_name):
     #https://stackoverflow.com/a/11287278 select multiple columns from dataframe
-    dfOutput= df[['Date','Close','ROI','Lower Bound','Upper Bound','Middle Bound','sellSignal','buySignal']]
+    dfOutput= df[['Date','Close','ROI','Lower Bound','Upper Bound','Middle Bound','sellSignal','buySignal','ExitSignal']]
     dfOutput.to_csv(file_name,index=False)
 
 def BollingerPlot(df,pltname):
@@ -615,12 +616,12 @@ def PriceChannel(df):
     df['Sell']= df['Lower Bound']-df['Close']
     #df['BelowBand'] = df['Sell'].apply(lambda x: 1 if x <0 else 0)
     #df['BelowBand5'] = df['BelowBand'].rolling(window=5).sum()
-    df['sellSignal']= df['Sell'].apply(lambda x: 1 if x >0 else 0)
+    df['sellSignal']= df['Sell'].apply(lambda x: 1 if x >0 else '')
 
     df['Buy']= df['Close']-df['Upper Bound']
     #df['AboveBand'] = df['Buy'].apply(lambda x: 1 if x <0 else 0)
     #df['AboveBand5'] = df['AboveBand'].rolling(window=5).sum()
-    df['buySignal']= df['Buy'].apply(lambda x: 1 if x >0 else 0)
+    df['buySignal']= df['Buy'].apply(lambda x: 1 if x >0 else '')
     return df
 
 def PriceChannelOutputCSV(df,file_name):
@@ -630,8 +631,49 @@ def PriceChannelOutputCSV(df,file_name):
 
 def bollingerClose(df):
     #https://stackoverflow.com/a/16729808
-    print df.iloc[20]['Buy']
+    state = 'netural'
+    price = 0.0
+    df['ExitSignal']=''    
+    for i in range(0,len(df.index)):
+        if state =='buy'or state == 'sell':
+            #exit if it is in position
+            if df.iloc[i]['sellSignal'] != '':
+                if int(df.iloc[i]['sellSignal'])==1:
+                    state ='netural'
+                    df.at[i,'ExitSignal']= 1
+                    price =0
+            if df.iloc[i]['buySignal'] != '':
+                if int(df.iloc[i]['buySignal'])==1:
+                    state ='netural'
+                    df.at[i,'ExitSignal']= 1
+                    price =0
+            
+            if (df.iloc[i]['Close']-price)/price >0.2:
+                state ='netural'
+                df.at[i,'ExitSignal']= 1
+                price =0
+            if (df.iloc[i]['Close']-price)/price <-0.1:
+                state ='netural'
+                df.at[i,'ExitSignal']= 1
+                price =0
+              
+        elif state == 'netural':
+            if df.iloc[i]['sellSignal'] != '':
+                if int(df.iloc[i]['sellSignal'])==1:
+                    state = 'sell'
+                    price = df.iloc[i]['Close']
+            
+            if df.iloc[i]['buySignal'] != '':
+                if int(df.iloc[i]['buySignal'])==1:
+                    state = 'buy'
+                    price = df.iloc[i]['Close']
 
+    return df
+
+def bollingerOutputCSV2(df,file_name):
+    dfOutput= df[['Date','Price','buySignal','sellSignal','ExitSignal','Close']]
+    dfOutput.columns = ['Date' , 'Price' , 'BuySignal' , 'SellSignal' , 'ExitSignal','Close']
+    dfOutput.to_csv(file_name,index=False)
 
 
 
@@ -704,32 +746,55 @@ if __name__== "__main__":
     AAPLdataBollinger=AAPLdata.copy()
     AAPLdataBollinger=AAPLBollinger(AAPLdataBollinger)
     AAPLBollingerPlot(AAPLdataBollinger, 'AAPL 20 Period Bollinger Band')
-    bollingerOutputCSV(AAPLdataBollinger,'AAPL/AAPLBollinger.csv')
-    bollingerClose(AAPLdataBollinger)
-
+    
+    AAPLdataBollingerExit = AAPLdataBollinger.copy()
+    AAPLdataBollingerExit=bollingerClose(AAPLdataBollingerExit)
+    bollingerOutputCSV(AAPLdataBollingerExit,'AAPL/AAPLBollinger.csv')
+    bollingerOutputCSV2(AAPLdataBollingerExit,'AAPL/AAPLBollingerExit.csv')
+       
+    
+   
     DJIdataBollinger=DJIdata.copy()
     DJIdataBollinger=Bollinger(DJIdataBollinger)[:]
     BollingerPlot(DJIdataBollinger, 'DJI 20 Period Bollinger Band')
-    bollingerOutputCSV(DJIdataBollinger,'DJI30/DJIBollinger.csv')
+   
+    DJIdataBollingerExit = DJIdataBollinger.copy()
+    DJIdataBollingerExit=bollingerClose(DJIdataBollingerExit)
+    bollingerOutputCSV(DJIdataBollingerExit,'DJI30/DJIBollinger.csv')
+    bollingerOutputCSV2(DJIdataBollingerExit,'DJI30/DJIBollingerExit.csv')
+    
 
     NASDAQ30dataBollinger=NASDAQ30data.copy()
     NASDAQ30dataBollinger=Bollinger(NASDAQ30dataBollinger)[:]
     BollingerPlot(NASDAQ30dataBollinger, 'Nasdaq 20 Period Bollinger Band')
-    bollingerOutputCSV(NASDAQ30dataBollinger,'NASDAQ30/NASDAQBollinger.csv')
-
+    
+    NASDAQ30dataBollingerExit = NASDAQ30dataBollinger.copy()
+    NASDAQ30dataBollingerExit=bollingerClose(NASDAQ30dataBollingerExit)
+    bollingerOutputCSV2(NASDAQ30dataBollingerExit,'NASDAQ30/NASDAQBollingerExit.csv')
+    bollingerOutputCSV(NASDAQ30dataBollingerExit,'NASDAQ30/NASDAQBollinger.csv')
+    
     #Price Channel
     #0.copy over the dataframe 1.Process data 2.plot chart 3.output to csv
     priceChannelAAPLdata=AAPLdata.copy()
     priceChannelAAPLdata=PriceChannel(priceChannelAAPLdata)
     AAPLBollingerPlot(AAPLdataBollinger, 'AAPL 20 Period Price Channel')
-    PriceChannelOutputCSV(priceChannelAAPLdata,'AAPL/AAPLPriceChannel.csv')
-
+    priceChannelAAPLdataExit = priceChannelAAPLdata.copy()
+    priceChannelAAPLdataExit=bollingerClose(priceChannelAAPLdataExit)
+    bollingerOutputCSV2(priceChannelAAPLdataExit,'AAPL/AAPLPriceChannelExit.csv')
+    PriceChannelOutputCSV(priceChannelAAPLdataExit,'AAPL/AAPLPriceChannel.csv')
+    
     priceChannelDJIdata = DJIdata.copy()
     priceChannelDJIdata=PriceChannel(priceChannelDJIdata)
     BollingerPlot(priceChannelDJIdata, 'DJI 20 Period Price Channel')
-    PriceChannelOutputCSV(priceChannelDJIdata,'DJI30/DJIPriceChannel.csv')
-
+    priceChannelDJIdataExit = priceChannelDJIdata.copy()
+    priceChannelDJIdataExit=bollingerClose(priceChannelDJIdataExit)
+    bollingerOutputCSV2(priceChannelDJIdataExit,'DJI30/DJIPriceChannelExit.csv')
+    PriceChannelOutputCSV(priceChannelDJIdataExit,'DJI30/DJIPriceChannel.csv')
+    
     priceChannelNASDAQdata = NASDAQ30data.copy()
     priceChannelNASDAQdata=PriceChannel(priceChannelNASDAQdata)
     BollingerPlot(priceChannelNASDAQdata, 'NASDAQ 20 Period Price Channel')
-    PriceChannelOutputCSV(priceChannelNASDAQdata,'NASDAQ30/NASDAQPriceChannel.csv')
+    priceChannelNASDAQdataExit = priceChannelNASDAQdata.copy()
+    priceChannelNASDAQdataExit=bollingerClose(priceChannelNASDAQdataExit)
+    bollingerOutputCSV2(priceChannelNASDAQdataExit,'NASDAQ30/NASDAQPriceChannelExit.csv')
+    PriceChannelOutputCSV(priceChannelNASDAQdataExit,'DJI30/NASDAQPriceChannel.csv')
