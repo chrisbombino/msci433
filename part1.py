@@ -143,6 +143,9 @@ def sma_ema(DJIdata, file_name, directory):
 
     SMA_DF.columns = ['Date' , 'Price' , 'BuySignal' , 'SellSignal' , 'ExitSignal']
     
+    SMA_DF = SMA_DF.replace([0, 'NA'], '')
+    
+    
     SMA_DF.to_csv(directory + '/SMA_DF_' + file_name + '.csv',index=False)
 
 
@@ -309,6 +312,7 @@ def sma_ema(DJIdata, file_name, directory):
 
     EMA_DF.columns = ['Date' , 'Price' , 'BuySignal' , 'SellSignal' , 'ExitSignal']
     
+    EMA_DF = EMA_DF.replace([0, 'NA'], '')
     
     EMA_DF.to_csv(directory + '/EMA_DF_' + file_name + '.csv',index=False)
     
