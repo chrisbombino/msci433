@@ -257,9 +257,12 @@ def main(symbols, k=5):
     ML_DF['AccuracyScore'] = AccuracyScore
     ML_DF['Indicator'] = Indicator
     ML_DF['Symbol'] = stock
-            
+    
+    ML_DF_GroupBy = ML_DF.groupby(['Indicator']).mean()        
+    
     print(ML_DF)
-        
+    
+    print(ML_DF_GroupBy)        
         
 
 main(symbols)
