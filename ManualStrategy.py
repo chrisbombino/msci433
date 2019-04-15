@@ -176,7 +176,7 @@ def simulateTrading(df):
     plt.show()
 
 if __name__ == '__main__':
-    data = pd.read_csv('test.csv')
+    data = pd.read_csv('DJI30/DJI-RSI.csv')
     numShares = 10 # shares bought in batches of 10
     startingCash = 1000
 
