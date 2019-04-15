@@ -22,232 +22,249 @@ def main(symbols, k=5):
         # if ROI > 0, set value to 1; else set value to 0
         df['ROI_binary'] = [1 if roi > 0 else 0 for roi in df.loc[:, 'ROI']]
 
-    ML_DF = pd.DataFrame(columns = ['Indicator' , 'AccuracyScore'])
+    ML_DF = pd.DataFrame(columns = ['Indicator' , 'AccuracyScore' , 'Symbol'])
     Indicator = []
     AccuracyScore = []
+    stock = []
     for symbol in symbols : 
-            # create X and Y values
-            X = df.loc[14:, ['RSI', 'SMA5']]
-            Y = df.loc[14:, 'ROI_binary']
-    
-            # split the data
-            X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
-    
-            # fit the training data
-            knn = KNeighborsClassifier(n_neighbors=k)
-            knn.fit(X_train, Y_train)
-            # predict the test values
-            Y_pred = knn.predict(X_test)
-            print('The accuracy score for ' + symbol + ' RSI & SMA5 is ')
-            print metrics.accuracy_score(Y_test, Y_pred)
-            RSI_SMA5 = metrics.accuracy_score(Y_test, Y_pred)
-            AccuracyScore.append(RSI_SMA5)
-            Indicator.append('RSI & SMA5')
-            
-            
-            
+        # create X and Y values
+        X = df.loc[14:, ['RSI', 'SMA5']]
+        Y = df.loc[14:, 'ROI_binary']
+
+        # split the data
+        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+
+        # fit the training data
+        knn = KNeighborsClassifier(n_neighbors=k)
+        knn.fit(X_train, Y_train)
+        # predict the test values
+        Y_pred = knn.predict(X_test)
+#            print('The accuracy score for ' + symbol + ' RSI & SMA5 is ')
+#            print metrics.accuracy_score(Y_test, Y_pred)
+        RSI_SMA5 = metrics.accuracy_score(Y_test, Y_pred)
+        AccuracyScore.append(RSI_SMA5)
+        Indicator.append('RSI & SMA5')
+        stock.append(symbol)
+        
+        
+        
 #--------------------------------------------------------------------------------------------------------
-        
-            # create X and Y values
-            X = df.loc[14:, ['RSI', 'SMA10']]
-            Y = df.loc[14:, 'ROI_binary']
     
-            # split the data
-            X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
-    
-            # fit the training data
-            knn = KNeighborsClassifier(n_neighbors=k)
-            knn.fit(X_train, Y_train)
-    
-            # predict the test values
-            Y_pred = knn.predict(X_test)
-            print('The accuracy score for ' + symbol + ' RSI & SMA10 is ')
-            print metrics.accuracy_score(Y_test, Y_pred)
-            RSI_SMA10 = metrics.accuracy_score(Y_test, Y_pred)
-            AccuracyScore.append(RSI_SMA10)
-            Indicator.append('RSI & SMA10')
-    
+        # create X and Y values
+        X = df.loc[14:, ['RSI', 'SMA10']]
+        Y = df.loc[14:, 'ROI_binary']
+
+        # split the data
+        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+
+        # fit the training data
+        knn = KNeighborsClassifier(n_neighbors=k)
+        knn.fit(X_train, Y_train)
+
+        # predict the test values
+        Y_pred = knn.predict(X_test)
+#            print('The accuracy score for ' + symbol + ' RSI & SMA10 is ')
+#            print metrics.accuracy_score(Y_test, Y_pred)
+        RSI_SMA10 = metrics.accuracy_score(Y_test, Y_pred)
+        AccuracyScore.append(RSI_SMA10)
+        Indicator.append('RSI & SMA10')
+        stock.append(symbol)
+
 #--------------------------------------------------------------------------------------------------------    
-    
-            # create X and Y values
-            X = df.loc[14:, ['RSI', 'SMA15']]
-            Y = df.loc[14:, 'ROI_binary']
-    
-            # split the data
-            X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
-    
-            # fit the training data
-            knn = KNeighborsClassifier(n_neighbors=k)
-            knn.fit(X_train, Y_train)
-    
-            # predict the test values
-            Y_pred = knn.predict(X_test)
-            print('The accuracy score for ' + symbol + ' RSI & SMA15 is ')
-            print metrics.accuracy_score(Y_test, Y_pred)
-            RSI_SMA15 = metrics.accuracy_score(Y_test, Y_pred)
-            AccuracyScore.append(RSI_SMA15)
-            Indicator.append('RSI & SMA15')            
-    
+
+        # create X and Y values
+        X = df.loc[14:, ['RSI', 'SMA15']]
+        Y = df.loc[14:, 'ROI_binary']
+
+        # split the data
+        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+
+        # fit the training data
+        knn = KNeighborsClassifier(n_neighbors=k)
+        knn.fit(X_train, Y_train)
+
+        # predict the test values
+        Y_pred = knn.predict(X_test)
+#            print('The accuracy score for ' + symbol + ' RSI & SMA15 is ')
+#            print metrics.accuracy_score(Y_test, Y_pred)
+        RSI_SMA15 = metrics.accuracy_score(Y_test, Y_pred)
+        AccuracyScore.append(RSI_SMA15)
+        Indicator.append('RSI & SMA15')    
+        stock.append(symbol)
+
 #--------------------------------------------------------------------------------------------------------    
-               
-            df['SMA5/Close'] = df['SMA5'] / df['Close']    
-            # create X and Y values
-            X = df.loc[14:, ['RSI', 'SMA5/Close']]
-            Y = df.loc[14:, 'ROI_binary']
+           
+        df['SMA5/Close'] = df['SMA5'] / df['Close']    
+        # create X and Y values
+        X = df.loc[14:, ['RSI', 'SMA5/Close']]
+        Y = df.loc[14:, 'ROI_binary']
+
+        # split the data
+        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+
+        # fit the training data
+        knn = KNeighborsClassifier(n_neighbors=k)
+        knn.fit(X_train, Y_train)
+
+        # predict the test values
+        Y_pred = knn.predict(X_test)
+#            print('The accuracy score for ' + symbol + ' RSI & SMA5/Close(t) is ')
+#            print metrics.accuracy_score(Y_test, Y_pred)
+        RSI_SMA5_Close = metrics.accuracy_score(Y_test, Y_pred)
+        AccuracyScore.append(RSI_SMA5_Close)
+        Indicator.append('RSI & SMA5/Close(t)')
+        stock.append(symbol)
     
-            # split the data
-            X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
-    
-            # fit the training data
-            knn = KNeighborsClassifier(n_neighbors=k)
-            knn.fit(X_train, Y_train)
-    
-            # predict the test values
-            Y_pred = knn.predict(X_test)
-            print('The accuracy score for ' + symbol + ' RSI & SMA5/Close(t) is ')
-            print metrics.accuracy_score(Y_test, Y_pred)
-            RSI_SMA5_Close = metrics.accuracy_score(Y_test, Y_pred)
-            AccuracyScore.append(RSI_SMA5_Close)
-            Indicator.append('RSI & SMA5/Close(t)')
-        
-#--------------------------------------------------------------------------------------------------------        
-        
-            df['SMA10/Close'] = df['SMA10'] / df['Close']    
-            # create X and Y values
-            X = df.loc[14:, ['RSI', 'SMA10/Close']]
-            Y = df.loc[14:, 'ROI_binary']
-    
-            # split the data
-            X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
-    
-            # fit the training data
-            knn = KNeighborsClassifier(n_neighbors=k)
-            knn.fit(X_train, Y_train)
-    
-            # predict the test values
-            Y_pred = knn.predict(X_test)
-            print('The accuracy score for ' + symbol + ' RSI & SMA10/Close(t) is ')
-            print metrics.accuracy_score(Y_test, Y_pred)
-            RSI_SMA10_Close = metrics.accuracy_score(Y_test, Y_pred)        
-            AccuracyScore.append(RSI_SMA10_Close)
-            Indicator.append('RSI & SMA10/Close(t)')
-            
 #--------------------------------------------------------------------------------------------------------        
     
-            df['SMA15/Close'] = df['SMA15'] / df['Close']    
-            # create X and Y values
-            X = df.loc[14:, ['RSI', 'SMA15/Close']]
-            Y = df.loc[14:, 'ROI_binary']
+        df['SMA10/Close'] = df['SMA10'] / df['Close']    
+        # create X and Y values
+        X = df.loc[14:, ['RSI', 'SMA10/Close']]
+        Y = df.loc[14:, 'ROI_binary']
+
+        # split the data
+        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+
+        # fit the training data
+        knn = KNeighborsClassifier(n_neighbors=k)
+        knn.fit(X_train, Y_train)
+
+        # predict the test values
+        Y_pred = knn.predict(X_test)
+#            print('The accuracy score for ' + symbol + ' RSI & SMA10/Close(t) is ')
+#            print metrics.accuracy_score(Y_test, Y_pred)
+        RSI_SMA10_Close = metrics.accuracy_score(Y_test, Y_pred)        
+        AccuracyScore.append(RSI_SMA10_Close)
+        Indicator.append('RSI & SMA10/Close(t)')
+        stock.append(symbol)
+        
+#--------------------------------------------------------------------------------------------------------        
+
+        df['SMA15/Close'] = df['SMA15'] / df['Close']    
+        # create X and Y values
+        X = df.loc[14:, ['RSI', 'SMA15/Close']]
+        Y = df.loc[14:, 'ROI_binary']
+
+        # split the data
+        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+
+        # fit the training data
+        knn = KNeighborsClassifier(n_neighbors=k)
+        knn.fit(X_train, Y_train)
+
+        # predict the test values
+        Y_pred = knn.predict(X_test)
+#            print('The accuracy score for ' + symbol + ' RSI & SMA15/Close(t) is ')
+#            print metrics.accuracy_score(Y_test, Y_pred)
+        RSI_SMA15_Close = metrics.accuracy_score(Y_test, Y_pred)
+        AccuracyScore.append(RSI_SMA15_Close)
+        Indicator.append('RSI & SMA15/Close(t)')
+        stock.append(symbol)
     
-            # split the data
-            X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+#--------------------------------------------------------------------------------------------------------
+        
+        df['SMA10/SMA5'] = df['SMA10'] / df['SMA5']    
+        # create X and Y values
+        X = df.loc[14:, ['RSI', 'SMA10/SMA5']]
+        Y = df.loc[14:, 'ROI_binary']
+
+        # split the data
+        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+
+        # fit the training data
+        knn = KNeighborsClassifier(n_neighbors=k)
+        knn.fit(X_train, Y_train)
+
+        # predict the test values
+        Y_pred = knn.predict(X_test)
+#            print('The accuracy score for ' + symbol + ' RSI & SMA10/SMA5 is ')
+#            print metrics.accuracy_score(Y_test, Y_pred)
+        RSI_SMA10_SMA5 = metrics.accuracy_score(Y_test, Y_pred)  
+        AccuracyScore.append(RSI_SMA10_SMA5)
+        Indicator.append('RSI & SMA10/SMA5')
+        stock.append(symbol)
     
-            # fit the training data
-            knn = KNeighborsClassifier(n_neighbors=k)
-            knn.fit(X_train, Y_train)
-    
-            # predict the test values
-            Y_pred = knn.predict(X_test)
-            print('The accuracy score for ' + symbol + ' RSI & SMA15/Close(t) is ')
-            print metrics.accuracy_score(Y_test, Y_pred)
-            RSI_SMA15_Close = metrics.accuracy_score(Y_test, Y_pred)
-            AccuracyScore.append(RSI_SMA15_Close)
-            Indicator.append('RSI & SMA15/Close(t)')
+#--------------------------------------------------------------------------------------------------------
+        
+        df['SMA15/SMA10'] = df['SMA15'] / df['SMA10']    
+        # create X and Y values
+        X = df.loc[14:, ['RSI', 'SMA15/SMA10']]
+        Y = df.loc[14:, 'ROI_binary']
+
+        # split the data
+        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+
+        # fit the training data
+        knn = KNeighborsClassifier(n_neighbors=k)
+        knn.fit(X_train, Y_train)
+
+        # predict the test values
+        Y_pred = knn.predict(X_test)
+#            print('The accuracy score for ' + symbol + ' RSI & SMA15/SMA10 is ')
+#            print metrics.accuracy_score(Y_test, Y_pred)
+        RSI_SMA15_SMA10 = metrics.accuracy_score(Y_test, Y_pred)         
+        AccuracyScore.append(RSI_SMA15_SMA10)
+        Indicator.append('RSI & SMA15/SMA10')
+        stock.append(symbol)
         
 #--------------------------------------------------------------------------------------------------------
-            
-            df['SMA10/SMA5'] = df['SMA10'] / df['SMA5']    
-            # create X and Y values
-            X = df.loc[14:, ['RSI', 'SMA10/SMA5']]
-            Y = df.loc[14:, 'ROI_binary']
-    
-            # split the data
-            X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
-    
-            # fit the training data
-            knn = KNeighborsClassifier(n_neighbors=k)
-            knn.fit(X_train, Y_train)
-    
-            # predict the test values
-            Y_pred = knn.predict(X_test)
-            print('The accuracy score for ' + symbol + ' RSI & SMA10/SMA5 is ')
-            print metrics.accuracy_score(Y_test, Y_pred)
-            RSI_SMA10_SMA5 = metrics.accuracy_score(Y_test, Y_pred)  
-            AccuracyScore.append(RSI_SMA10_SMA5)
-            Indicator.append('RSI & SMA10/SMA5')
         
-#--------------------------------------------------------------------------------------------------------
-            
-            df['SMA15/SMA10'] = df['SMA15'] / df['SMA10']    
-            # create X and Y values
-            X = df.loc[14:, ['RSI', 'SMA15/SMA10']]
-            Y = df.loc[14:, 'ROI_binary']
-    
-            # split the data
-            X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
-    
-            # fit the training data
-            knn = KNeighborsClassifier(n_neighbors=k)
-            knn.fit(X_train, Y_train)
-    
-            # predict the test values
-            Y_pred = knn.predict(X_test)
-            print('The accuracy score for ' + symbol + ' RSI & SMA15/SMA10 is ')
-            print metrics.accuracy_score(Y_test, Y_pred)
-            RSI_SMA15_SMA10 = metrics.accuracy_score(Y_test, Y_pred)         
-            AccuracyScore.append(RSI_SMA15_SMA10)
-            Indicator.append('RSI & SMA15/SMA10')
-            
-#--------------------------------------------------------------------------------------------------------
-            
-            df['RSI/Close'] = df['RSI'] / df['Close']    
-            # create X and Y values
-            X = df.loc[14:, ['RSI/Close', 'SMA5']]
-            Y = df.loc[14:, 'ROI_binary']
-    
-            # split the data
-            X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
-    
-            # fit the training data
-            knn = KNeighborsClassifier(n_neighbors=k)
-            knn.fit(X_train, Y_train)
-    
-            # predict the test values
-            Y_pred = knn.predict(X_test)
-            print('The accuracy score for ' + symbol + ' RSI/Close & SMA5 is ')
-            print metrics.accuracy_score(Y_test, Y_pred)
-            RSI_Close_SMA5 = metrics.accuracy_score(Y_test, Y_pred)
-            AccuracyScore.append(RSI_Close_SMA5)
-            Indicator.append('RSI/Close & SMA5')            
+        df['RSI/Close'] = df['RSI'] / df['Close']    
+        # create X and Y values
+        X = df.loc[14:, ['RSI/Close', 'SMA5']]
+        Y = df.loc[14:, 'ROI_binary']
+
+        # split the data
+        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+
+        # fit the training data
+        knn = KNeighborsClassifier(n_neighbors=k)
+        knn.fit(X_train, Y_train)
+
+        # predict the test values
+        Y_pred = knn.predict(X_test)
+#            print('The accuracy score for ' + symbol + ' RSI/Close & SMA5 is ')
+#            print metrics.accuracy_score(Y_test, Y_pred)
+        RSI_Close_SMA5 = metrics.accuracy_score(Y_test, Y_pred)
+        AccuracyScore.append(RSI_Close_SMA5)
+        Indicator.append('RSI/Close & SMA5')
+        stock.append(symbol)            
 
 #--------------------------------------------------------------------------------------------------------
 
-            df['RSI/Close'] = df['RSI'] / df['Close']    
-            # create X and Y values
-            X = df.loc[14:, ['RSI/Close', 'SMA10']]
-            Y = df.loc[14:, 'ROI_binary']
-    
-            # split the data
-            X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
-    
-            # fit the training data
-            knn = KNeighborsClassifier(n_neighbors=k)
-            knn.fit(X_train, Y_train)
-    
-            # predict the test values
-            Y_pred = knn.predict(X_test)
-            print('The accuracy score for ' + symbol + ' RSI/Close & SMA10 is ')
-            print metrics.accuracy_score(Y_test, Y_pred)
-            RSI_Close_SMA10 = metrics.accuracy_score(Y_test, Y_pred)                
-            AccuracyScore.append(RSI_Close_SMA10)
-            Indicator.append('RSI/Close & SMA10')        
+        df['RSI/Close'] = df['RSI'] / df['Close']    
+        # create X and Y values
+        X = df.loc[14:, ['RSI/Close', 'SMA10']]
+        Y = df.loc[14:, 'ROI_binary']
+
+        # split the data
+        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+
+        # fit the training data
+        knn = KNeighborsClassifier(n_neighbors=k)
+        knn.fit(X_train, Y_train)
+
+        # predict the test values
+        Y_pred = knn.predict(X_test)
+#            print('The accuracy score for ' + symbol + ' RSI/Close & SMA10 is ')
+#            print metrics.accuracy_score(Y_test, Y_pred)
+        RSI_Close_SMA10 = metrics.accuracy_score(Y_test, Y_pred)                
+        AccuracyScore.append(RSI_Close_SMA10)
+        Indicator.append('RSI/Close & SMA10')  
+        stock.append(symbol)
 #--------------------------------------------------------------------------------------------------------
         
-            ML_DF['AccuracyScore'] = AccuracyScore
-            ML_DF['Indicator'] = Indicator
-            
-            print(ML_DF)
-        
+    ML_DF['AccuracyScore'] = AccuracyScore
+    ML_DF['Indicator'] = Indicator
+    ML_DF['Symbol'] = stock
+    
+    ML_DF_GroupBy = ML_DF.groupby(['Indicator']).mean()        
+    
+    print(ML_DF)
+    print("")
+    print("The average across these stocks is ")
+    print("")
+    print(ML_DF_GroupBy)        
         
 
-main(test_symbols)
+main(symbols)
