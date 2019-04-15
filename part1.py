@@ -342,8 +342,9 @@ def AAPL_RSI(df):
 
     df['Sell Signal'] = sell
     df['Buy Signal'] = buy
-
-    df_csv = df[['Close', 'ROI', 'RSI', 'Sell Signal', 'Buy Signal']]
+    df['Exit Signal'] = exit
+    
+    df_csv = df[['Close', 'ROI', 'RSI', 'Sell Signal', 'Buy Signal', 'Exit Signal']]
     df_csv.to_csv('AAPL/AAPL-RSI.csv')
 
     # create the plot
