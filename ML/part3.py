@@ -261,7 +261,9 @@ def main(symbols, k=5):
     ML_DF_GroupBy = ML_DF.groupby(['Indicator']).mean()        
     
     print(ML_DF)
-    
+    print("")
+    print("The average across these stocks is ")
+    print("")
     print(ML_DF_GroupBy)        
         
 
